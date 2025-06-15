@@ -13,7 +13,12 @@ public class DefaultStaticResourcesProcessor implements RequestProcessor {
     public void execute(HttpRequest httpRequest, OutputStream output) throws IOException {
         String filename = httpRequest.getUri().substring(1);
         Path filePath = Paths.get("static/", filename);
-        byte[] fileData = Files.readAllBytes(filePath);
+        byte[] fileData;
+        try {
+            fileData = Files.readAllBytes(filePath);
+        } catch (IOException e) {
+            fileData = new byte[0];
+        }
         String response = "HTTP/1.1 200 OK\r\n" +
                 "Content-Length: " + fileData.length + "\r\n" +
                 "\r\n";
