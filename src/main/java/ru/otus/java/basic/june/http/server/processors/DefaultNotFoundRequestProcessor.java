@@ -12,6 +12,7 @@ public class DefaultNotFoundRequestProcessor implements RequestProcessor {
         String response = "HTTP/1.1 404 Not Found\r\n" +
                 "Content-Type: text/html\r\n" +
                 "\r\n" +
+                "<img src=\"notFound.png\"\r\n" +
                 "<html><body><h1>PAGE NOT FOUND!!!!!!!!!!!!!!!</h1></body></html>";
         output.write(response.getBytes(StandardCharsets.UTF_8));
     }
