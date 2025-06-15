@@ -26,6 +26,10 @@ public class HttpRequest {
         return parameters.get(key);
     }
 
+    public boolean containsParameter(String key) {
+        return parameters.containsKey(key);
+    }
+
     public HttpRequest(String rawRequest) {
         this.rawRequest = rawRequest;
         this.parameters = new HashMap<>();
