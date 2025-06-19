@@ -26,10 +26,9 @@ public class HttpRequest {
         return parameters.get(key);
     }
 
-    public HttpRequest(String rawRequest) {
+    private HttpRequest(String rawRequest) {
         this.rawRequest = rawRequest;
         this.parameters = new HashMap<>();
-        parse();
     }
 
     public void info(boolean showRawRequest) {
@@ -41,7 +40,13 @@ public class HttpRequest {
         System.out.println("BODY: " + body);
     }
 
-    private void parse() {
+    public static HttpRequest parse(String rawRequest) {
+        HttpRequest httpRequest = new HttpRequest(rawRequest);
+        httpRequest.doParse();
+        return httpRequest;
+    }
+
+    private void doParse() {
         int startIndex = rawRequest.indexOf(' ');
         int endIndex = rawRequest.indexOf(' ', startIndex + 1);
         method = rawRequest.substring(0, startIndex);
