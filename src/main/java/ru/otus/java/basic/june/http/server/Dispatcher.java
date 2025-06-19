@@ -47,17 +47,11 @@ public class Dispatcher {
             routes.get(request.getRoutingKey()).execute(request, output);
         } catch (BadRequestException e) {
             logger.info("BadRequestException");
-            String response = "HTTP/1.1 400 Bad Request\r\n" +
-                    "Content-Type: text/html; charset=utf-8\r\n" +
-                    "\r\n" +
-                    "<html><body><h1>Bad Request</h1><p>" + e.getCode() + ": " + e.getDescription() + "</p></body></html>";
+            String response = HttpServer.htmlResponseBuild("400 Bad Request", "<h1>Bad Request</h1><p>\" + e.getCode() + \": \" + e.getDescription() + \"</p>");
             output.write(response.getBytes(StandardCharsets.UTF_8));
         } catch (Exception e) {
             logger.info("Exception");
-            String response = "HTTP/1.1 500 Internal Server Error\r\n" +
-                    "Content-Type: text/html; charset=utf-8\r\n" +
-                    "\r\n" +
-                    "<html><body><h1>500 Internal Server Error</h1><h5>Ой, что-то сломалось, попробуйте позже...</h5></body></html>";
+            String response = HttpServer.htmlResponseBuild("500 Internal Server Error", "<h1>500 Internal Server Error</h1><h5>Ой, что-то сломалось, попробуйте позже...</h5>");
             output.write(response.getBytes(StandardCharsets.UTF_8));
         }
     }

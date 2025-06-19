@@ -35,6 +35,19 @@ public class HttpServer {
         }
     }
 
+    static public String htmlResponseBuild(String header, String body) {
+        return "HTTP/1.1 " + header + "\r\n" +
+                "Content-Type: text/html; charset=utf-8\r\n" +
+                "\r\n" +
+                "<html><body>" + body + "</body></html>";
+    }
+
+    static public String jsonResponseBuild(String itemJson) {
+        return "HTTP/1.1 200 OK\r\n" +
+                "Content-Type: application/json\r\n" +
+                "\r\n" + itemJson;
+    }
+
     static class ServerThread implements Runnable {
         private final Socket socket;
         private final Dispatcher dispatcher;
