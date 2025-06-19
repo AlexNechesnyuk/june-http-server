@@ -1,6 +1,7 @@
 package ru.otus.java.basic.june.http.server.processors;
 
 import ru.otus.java.basic.june.http.server.HttpRequest;
+import ru.otus.java.basic.june.http.server.HttpServer;
 import ru.otus.java.basic.june.http.server.exceptions_handling.BadRequestException;
 
 import java.io.IOException;
@@ -19,10 +20,7 @@ public class CalcRequestProcessor implements RequestProcessor {
         int a = Integer.parseInt(request.getParameter("a"));
         int b = Integer.parseInt(request.getParameter("b"));
         String result = a + " + " + b + " = " + (a + b);
-        String response = "HTTP/1.1 200 OK\r\n" +
-                "Content-Type: text/html\r\n" +
-                "\r\n" +
-                "<html><body><h1>" + result + "</h1></body></html>";
+        String response = HttpServer.htmlResponseBuild("200 OK", "<h1>" + result + "</h1>");
         output.write(response.getBytes(StandardCharsets.UTF_8));
     }
 }
