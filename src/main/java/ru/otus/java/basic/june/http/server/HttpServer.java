@@ -49,7 +49,7 @@ public class HttpServer {
                     return;
                 }
                 String rawRequest = new String(buffer, 0, n);
-                HttpRequest request = new HttpRequest(rawRequest);
+                HttpRequest request = HttpRequest.parse(rawRequest);
                 request.info(true);
                 dispatcher.execute(request, socket.getOutputStream());
             } catch (IOException e) {
