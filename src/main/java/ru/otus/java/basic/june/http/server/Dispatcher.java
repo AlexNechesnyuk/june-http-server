@@ -2,6 +2,8 @@ package ru.otus.java.basic.june.http.server;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import ru.otus.java.basic.june.http.server.app.ItemsDB;
+import ru.otus.java.basic.june.http.server.app.ItemsRepo;
 import ru.otus.java.basic.june.http.server.app.ItemsRepository;
 import ru.otus.java.basic.june.http.server.exceptions_handling.BadRequestException;
 import ru.otus.java.basic.june.http.server.processors.*;
@@ -22,13 +24,18 @@ public class Dispatcher {
 
     public Dispatcher() {
         this.routes = new HashMap<>();
-        ItemsRepository itemsRepository = new ItemsRepository();
-        this.routes.put("GET /hello", new HelloRequestProcessor());
-        this.routes.put("GET /calc", new CalcRequestProcessor());
-        this.routes.put("GET /items", new GetItemsRequestProcessor(itemsRepository));
-        this.routes.put("POST /items", new CreateItemRequestProcessor(itemsRepository));
-        this.defaultNotFountRequestProcessor = new DefaultNotFoundRequestProcessor();
-        this.defaultStaticResourcesRequestProcessor = new DefaultStaticResourcesProcessor();
+//        ItemsRepo itemsRepository = new ItemsRepository();
+        try {
+            ItemsRepo itemsRepository = new ItemsDB();
+            this.routes.put("GET /hello", new HelloRequestProcessor());
+            this.routes.put("GET /calc", new CalcRequestProcessor());
+            this.routes.put("GET /items", new GetItemsRequestProcessor(itemsRepository));
+            this.routes.put("POST /items", new CreateItemRequestProcessor(itemsRepository));
+            this.defaultNotFountRequestProcessor = new DefaultNotFoundRequestProcessor();
+            this.defaultStaticResourcesRequestProcessor = new DefaultStaticResourcesProcessor();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     public void execute(HttpRequest request, OutputStream output) throws IOException {

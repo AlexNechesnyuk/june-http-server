@@ -6,7 +6,7 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
-public class ItemsRepository {
+public class ItemsRepository implements ItemsRepo{
     private List<Item> items;
 
     public ItemsRepository() {
@@ -16,10 +16,12 @@ public class ItemsRepository {
         ));
     }
 
+    @Override
     public List<Item> getAll() {
         return Collections.unmodifiableList(items);
     }
 
+    @Override
     public Item get(Long id) {
         for (Item i : items) {
             if (i.getId().equals(id)) {
@@ -29,6 +31,7 @@ public class ItemsRepository {
         return null;
     }
 
+    @Override
     public Item create(Item item) {
         Long newId = 1L;
         for (Item i : items) {
