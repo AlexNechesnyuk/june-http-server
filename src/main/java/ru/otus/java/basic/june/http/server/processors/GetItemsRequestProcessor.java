@@ -2,6 +2,7 @@ package ru.otus.java.basic.june.http.server.processors;
 
 import com.google.gson.Gson;
 import ru.otus.java.basic.june.http.server.HttpRequest;
+import ru.otus.java.basic.june.http.server.HttpServer;
 import ru.otus.java.basic.june.http.server.app.Item;
 import ru.otus.java.basic.june.http.server.app.ItemsRepository;
 
@@ -27,12 +28,7 @@ public class GetItemsRequestProcessor implements RequestProcessor {
         } catch (Exception e) {
             itemJson = gson.toJson(itemsRepository.getAll());
         }
-
-
-        String response = "HTTP/1.1 200 OK\r\n" +
-                "Content-Type: application/json\r\n" +
-                "\r\n" +
-                itemJson;
+        String response = HttpServer.jsonResponseBuild(itemJson);
         output.write(response.getBytes(StandardCharsets.UTF_8));
     }
 }

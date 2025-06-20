@@ -1,5 +1,8 @@
 package ru.otus.java.basic.june.http.server;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
 import java.util.HashMap;
 import java.util.Map;
 
@@ -9,6 +12,18 @@ public class HttpRequest {
     private String uri;
     private Map<String, String> parameters;
     private String body;
+    private static final Logger logger = LogManager.getLogger(HttpRequest.class);
+
+    private HttpRequest(String rawRequest) {
+        this.rawRequest = rawRequest;
+        this.parameters = new HashMap<>();
+    }
+
+    public static HttpRequest parse(String rawRequest) {
+        HttpRequest httpRequest = new HttpRequest(rawRequest);
+        httpRequest.doParse();
+        return httpRequest;
+    }
 
     public String getUri() {
         return uri;
@@ -26,24 +41,17 @@ public class HttpRequest {
         return parameters.get(key);
     }
 
-    private HttpRequest(String rawRequest) {
-        this.rawRequest = rawRequest;
-        this.parameters = new HashMap<>();
+    public boolean containsParameter(String key) {
+        return parameters.containsKey(key);
     }
 
-    public void info(boolean showRawRequest) {
-        if (showRawRequest) {
-            System.out.println(rawRequest);
-        }
-        System.out.println("METHOD: " + method);
-        System.out.println("URI: " + uri);
-        System.out.println("BODY: " + body);
-    }
 
-    public static HttpRequest parse(String rawRequest) {
-        HttpRequest httpRequest = new HttpRequest(rawRequest);
-        httpRequest.doParse();
-        return httpRequest;
+    public void info() {
+        logger.debug(rawRequest);
+        logger.info("METHOD: " + method);
+        logger.info("METHOD: " + method);
+        logger.info("URI: " + uri);
+        logger.info("BODY: " + body);
     }
 
     private void doParse() {
