@@ -4,6 +4,7 @@ import com.google.gson.Gson;
 import ru.otus.java.basic.june.http.server.HttpRequest;
 import ru.otus.java.basic.june.http.server.HttpServer;
 import ru.otus.java.basic.june.http.server.app.Item;
+import ru.otus.java.basic.june.http.server.app.ItemsRepo;
 import ru.otus.java.basic.june.http.server.app.ItemsRepository;
 
 import java.io.IOException;
@@ -12,9 +13,9 @@ import java.nio.charset.StandardCharsets;
 import java.util.List;
 
 public class GetItemsRequestProcessor implements RequestProcessor {
-    private ItemsRepository itemsRepository;
+    private ItemsRepo itemsRepository;
 
-    public GetItemsRequestProcessor(ItemsRepository itemsRepository) {
+    public GetItemsRequestProcessor(ItemsRepo itemsRepository) {
         this.itemsRepository = itemsRepository;
     }
 
