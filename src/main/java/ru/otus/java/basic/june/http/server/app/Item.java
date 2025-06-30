@@ -4,6 +4,16 @@ import java.math.BigDecimal;
 
 public class Item {
     private Long id;
+    private Long stock;
+
+    public Long getStock() {
+        return stock;
+    }
+
+    public void setStock(Long stock) {
+        this.stock = stock;
+    }
+
     private String title;
     private BigDecimal price;
 
@@ -38,5 +48,6 @@ public class Item {
         this.id = id;
         this.title = title;
         this.price = price;
+        this.stock = 0L;
     }
 }

@@ -13,25 +13,25 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
 public class HttpServer {
-    private int port;
     private Dispatcher dispatcher;
     private static final Logger logger = LogManager.getLogger(HttpServer.class);
 
-    public HttpServer(int port) {
-        this.port = port;
+    public HttpServer() {
         this.dispatcher = new Dispatcher();
     }
 
     public void start() {
+        int port = Settings.getIntSettings("port");
+        int threads = Settings.getIntSettings("threadPullSize");
         try (ServerSocket serverSocket = new ServerSocket(port)) {
             logger.info("Сервер запущен на порту " + port + ". Ожидаем подключения");
-            ExecutorService executor = Executors.newFixedThreadPool(3);
+            ExecutorService executor = Executors.newFixedThreadPool(threads);
             while (true) {
                 Socket socket = serverSocket.accept();
                 executor.submit(new ServerThread(dispatcher, socket));
             }
         } catch (IOException e) {
-            e.printStackTrace();
+            logger.error(e);
         }
     }
 
@@ -59,6 +59,7 @@ public class HttpServer {
 
         @Override
         public void run() {
+            int maxRequestSize = Settings.getIntSettings("maxRequestSize");
             try (InputStream inputStream = socket.getInputStream();
                  OutputStream outputStream = socket.getOutputStream();
                  ByteArrayOutputStream requestData = new ByteArrayOutputStream();) {
@@ -66,7 +67,7 @@ public class HttpServer {
                 int bytesRead;
                 while ((bytesRead = socket.getInputStream().read(buffer)) != -1) {
                     requestData.write(buffer, 0, bytesRead);
-                    if (bytesRead < 8192 || requestData.size() > 256 * 1024) {
+                    if (bytesRead < 8192 || requestData.size() > maxRequestSize) {
                         break;
                     }
                 }
@@ -78,12 +79,12 @@ public class HttpServer {
                 request.info();
                 dispatcher.execute(request, socket.getOutputStream());
             } catch (IOException e) {
-                e.printStackTrace();
+                logger.error(e);
             } finally {
                 try {
                     socket.close();
                 } catch (IOException e) {
-                    e.printStackTrace();
+                    logger.error(e);
                 }
             }
         }
