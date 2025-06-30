@@ -1,13 +1,15 @@
 package ru.otus.java.basic.june.http.server.app;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+import ru.otus.java.basic.june.http.server.Dispatcher;
+
 import java.math.BigDecimal;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.List;
+import java.util.*;
 
 public class ItemsRepository implements ItemsRepo{
     private List<Item> items;
+    private static final Logger logger = LogManager.getLogger(ItemsRepository.class);
 
     public ItemsRepository() {
         this.items = new ArrayList<>(Arrays.asList(
@@ -29,6 +31,19 @@ public class ItemsRepository implements ItemsRepo{
             }
         }
         return null;
+    }
+
+    @Override
+    public void delete(Long id) {
+        Iterator<Item> iterator = items.iterator();
+        while (iterator.hasNext()) {
+            Item product = iterator.next();
+            if (product.getId().equals(id)) {
+                iterator.remove();
+                logger.debug("Удален товар: " + product);
+                return;
+            }
+        }
     }
 
     @Override

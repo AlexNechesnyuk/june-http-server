@@ -21,12 +21,14 @@
         <tr>
             <td>Название</td>
             <td>Цена</td>
+            <td>На складе</td>
             <td></td>
         </tr>
         <tbody>
         <tr ng-repeat="p in ProductsList">
             <td>{{p.title}}</td>
             <td>{{p.price}}</td>
+            <td>{{p.stock}}</td>
             <td>
                 <button class="btn btn-danger" ng-click="deleteProductById(p.id)">Удалить товар</button>
             </td>
